@@ -1,0 +1,8 @@
+# Git ignore
+.gitignore
+
+# NPM ignore
+.npmignore
+
+# Github actions cache directory
+.github/

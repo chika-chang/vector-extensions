@@ -1,0 +1,16 @@
+{
+  "name": "com.chika.vectorextensions",
+  "version": "0.0.0",
+  "displayName": "Vector Extensions",
+  "description": "This package adds some convert extensions between Vector2 and Vector3.",
+  "unity": "2019.4",
+  "license": "Apache-2.0",
+  "keywords": [
+    "extension"
+  ],
+  "author": {
+    "name": "Chika Chang",
+    "email": "seika850113@gmail.com",
+    "url": "https://github.com/chika-chang/com.chika.vectorextensions.git"
+  }
+}

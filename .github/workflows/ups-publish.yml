@@ -1,0 +1,23 @@
+name: Unity Package Server Publish
+on:
+  workflow_run:
+    workflows:
+      - Bump Version
+    types:
+      - completed
+jobs:
+  publish:
+    name: Publish
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup
+        uses: actions/setup-node@v2
+        with:
+          registry-url: ${{ secrets.NPM_REGISTRY_URL }}
+      - name: Publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}

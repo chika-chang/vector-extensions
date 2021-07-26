@@ -1,0 +1,39 @@
+name: Bump Version
+on:
+  - workflow_dispatch
+jobs:
+  bump-version:
+    name: Bump Version
+    if: "!startsWith(github.event.head_commit.message, 'chore(release):')"
+    runs-on: ubuntu-latest
+    outputs:
+      clean_changelog: ${{ steps.bump.outputs.clean_changelog }}
+      tag: ${{ steps.bump.outputs.tag }}
+      skipped: ${{ steps.bump.outputs.skipped }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Bump
+        id: bump
+        uses: TriPSs/conventional-changelog-action@v3
+        with:
+          github-token: ${{ secrets.github_token }}
+          git-message: 'chore(release): {version} [skip ci]'
+          git-user-name: github-actions[bot]
+          git-user-email: 41898282+github-actions[bot]@users.noreply.github.com
+          preset: conventionalcommits
+  release:
+    name: Release
+    needs: bump-version
+    if: ${{ needs.bump-version.outputs.skipped == 'false' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body: ${{ needs.bump-version.outputs.clean_changelog }}
+          tag_name: ${{ needs.bump-version.outputs.tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
